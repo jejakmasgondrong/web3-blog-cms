@@ -17,9 +17,9 @@ interface ArticleCardProps {
 
 export default function ArticleCard({ article }: ArticleCardProps) {
   return (
-    <Link href={`/article/${article.slug}`}>
-      <article className="group bg-gray-900/50 rounded-xl overflow-hidden hover:bg-gray-900 transition-all duration-300 hover:scale-[1.02] h-full flex flex-col">
-        {article.image && (
+    <div className="group bg-gray-900/50 rounded-xl overflow-hidden hover:bg-gray-900 transition-all duration-300 hover:scale-[1.02] h-full flex flex-col">
+      {article.image && (
+        <Link href={`/article/${article.slug}`}>
           <div className="relative h-48 overflow-hidden flex-shrink-0">
             <img
               src={article.image}
@@ -28,48 +28,54 @@ export default function ArticleCard({ article }: ArticleCardProps) {
               loading="lazy"
             />
           </div>
-        )}
+        </Link>
+      )}
+      
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
+          <time dateTime={article.createdAt}>
+            {formatDate(article.createdAt)}
+          </time>
+          <span>•</span>
+          <span>{getRelativeTime(article.createdAt)}</span>
+        </div>
         
-        <div className="p-6 flex flex-col flex-1">
-          <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
-            <time dateTime={article.createdAt}>
-              {formatDate(article.createdAt)}
-            </time>
-            <span>•</span>
-            <span>{getRelativeTime(article.createdAt)}</span>
-          </div>
-          
+        <Link href={`/article/${article.slug}`}>
           <h2 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
             {article.title}
           </h2>
-          
-          <p className="text-gray-400 mb-4 line-clamp-2 flex-1">
-            {article.description}
-          </p>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-500">
-              By {article.author}
-            </span>
-            <span className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-full text-xs">
-              {article.category}
-            </span>
-          </div>
-          
-          {article.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {article.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 bg-gray-800 text-gray-300 rounded-full text-xs"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
+        </Link>
+        
+        <p className="text-gray-400 mb-4 line-clamp-2 flex-1">
+          {article.description}
+        </p>
+        
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-500">
+            By {article.author}
+          </span>
+          <Link
+            href={`/category/${article.category.toLowerCase()}`}
+            className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-full text-xs hover:bg-blue-600/30 transition-colors"
+          >
+            {article.category}
+          </Link>
         </div>
-      </article>
-    </Link>
+        
+        {article.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {article.tags.slice(0, 3).map((tag) => (
+              <Link
+                key={tag}
+                href={`/tag/${tag.toLowerCase()}`}
+                className="px-2 py-1 bg-gray-800 text-gray-300 rounded-full text-xs hover:bg-gray-700 transition-colors"
+              >
+                #{tag}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
