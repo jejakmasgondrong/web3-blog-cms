@@ -554,4 +554,74 @@ Screenshots:
 
 ---
 
-*Last Updated: 2026-07-20*
+### 8. Database Testing Issues
+
+#### Error: Cannot find module '@/lib/db'
+
+Error Message:
+```
+Error: Cannot find module '/home/gondrong/Workspace/web3-blog-cms/lib/db' 
+imported from /home/gondrong/Workspace/web3-blog-cms/test-db.ts
+```
+
+Cause:
+- Using `ts-node` directly with TypeScript path aliases (`@/*`) doesn't work without proper configuration
+
+Solutions:
+
+Option 1: Use Next.js API Route (Recommended)
+```bash
+# Create API route for testing
+mkdir -p app/api/test-db
+# Create route.ts with your test logic
+# Access via http://localhost:3000/api/test-db
+```
+
+Option 2: Use ts-node with proper configuration
+```bash
+# Install tsconfig-paths
+npm install -D tsconfig-paths
+# Run with paths
+npx ts-node -r tsconfig-paths/register test-db.ts
+```
+
+Option 3: Use simple JavaScript file
+```javascript
+// test-db-simple.js
+const fs = require('fs');
+const path = require('path');
+// Direct file reading without TypeScript
+```
+
+#### Error: No such file or directory when creating test route
+
+Error Message:
+```
+touch: cannot touch 'app/api/test-db/route.ts': No such file or directory
+```
+
+Solution:
+```bash
+# Always create directory first
+mkdir -p app/api/test-db
+# Then create the file
+cat > app/api/test-db/route.ts << 'EOF'
+// content
+EOF
+```
+
+### 9. API Route Not Found (404)
+
+Error Message:
+```
+GET /api/test-db 404 Not Found
+```
+
+Solutions:
+```bash
+# Check if route file exists
+ls -la app/api/test-db/route.ts
+
+# Restart dev server
+npm run dev
+```

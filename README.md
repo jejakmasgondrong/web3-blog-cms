@@ -162,6 +162,87 @@ npm run build
 npm start
 ```
 
+## 💾 Database Layer
+
+The CMS uses a JSON file-based database system for simplicity and easy setup.
+
+### Data Storage
+
+- **Location:** `data/articles.json`
+- **Format:** JSON array of article objects
+- **Persistence:** Read/write operations to file system
+
+### Database Functions
+
+| Function | Description | Parameters | Returns |
+|----------|-------------|------------|---------|
+| `readArticles()` | Read all articles from file | None | `Article[]` |
+| `writeArticles()` | Write articles to file | `articles: Article[]` | `void` |
+| `getAllArticles()` | Get articles with filtering | `filters?: ArticleFilters` | `Article[]` |
+| `getArticleBySlug()` | Get single article by slug | `slug: string` | `Article \| null` |
+| `getArticlesByCategory()` | Get articles by category | `category: string, limit?: number` | `Article[]` |
+| `getArticlesByTag()` | Get articles by tag | `tag: string, limit?: number` | `Article[]` |
+| `getRelatedArticles()` | Get related articles | `article: Article, limit?: number` | `Article[]` |
+| `createArticle()` | Create new article | `input: ArticleInput, author?: string` | `Article` |
+| `updateArticle()` | Update existing article | `slug: string, input: Partial<ArticleInput>` | `Article \| null` |
+| `deleteArticle()` | Delete article by slug | `slug: string` | `boolean` |
+| `getCategories()` | Get all categories with counts | None | `Category[]` |
+| `getTags()` | Get all tags with counts | None | `Tag[]` |
+| `searchArticles()` | Search articles by query | `query: string` | `Article[]` |
+
+### Testing the Database
+
+To test database functions:
+
+1. Start development server:
+   ```bash
+   npm run dev
+   ```
+
+2. Access test endpoint:
+   ```
+   http://localhost:3000/api/test-db
+   ```
+
+3. Or use curl:
+   ```bash
+   curl http://localhost:3000/api/test-db
+   ```
+
+### Sample Article Structure
+
+```json
+{
+  "id": "1",
+  "title": "Getting Started with Web3 Development",
+  "slug": "getting-started-with-web3-development",
+  "content": "## What is Web3?...",
+  "description": "A comprehensive guide...",
+  "category": "Web3 Development",
+  "tags": ["web3", "blockchain", "development"],
+  "image": "https://example.com/image.jpg",
+  "author": "Web3 Expert",
+  "createdAt": "2026-07-15T10:00:00.000Z",
+  "updatedAt": "2026-07-15T10:00:00.000Z"
+}
+```
+
+### Filter Example
+
+```typescript
+// Get 5 latest articles from Web3 Development category
+const articles = getAllArticles({
+  category: 'Web3 Development',
+  sortBy: 'createdAt',
+  sortOrder: 'desc',
+  limit: 5
+});
+
+// Search for articles about blockchain
+const results = searchArticles('blockchain');
+```
+
+
 ## 🤝 Contributing
 
 Contributions are welcome! Here's how:
