@@ -1,0 +1,54 @@
+[
+  {
+    "id": "1",
+    "title": "Getting Started with Web3 Development",
+    "slug": "getting-started-with-web3-development",
+    "content": "## What is Web3?\n\nWeb3 represents the next generation of the internet, where users have control over their own data and digital assets. Unlike Web2, which is dominated by centralized platforms, Web3 is built on decentralized technologies like blockchain.\n\n### Key Components of Web3\n\n1. **Blockchain** - The underlying technology that powers Web3\n2. **Smart Contracts** - Self-executing contracts with the terms directly written in code\n3. **Cryptocurrency** - Digital assets that enable value transfer\n4. **Decentralized Apps (dApps)** - Applications that run on blockchain networks\n\n## Why Learn Web3?\n\nThe Web3 ecosystem is growing rapidly, with increasing demand for developers who understand blockchain technology. Learning Web3 opens up opportunities in DeFi, NFTs, DAOs, and more.\n\n### Getting Started\n\nTo begin your Web3 journey:\n\n1. Learn Solidity or Rust\n2. Understand blockchain fundamentals\n3. Build your first dApp\n4. Join the Web3 community",
+    "description": "A comprehensive guide to understanding Web3 development and getting started with blockchain technology",
+    "category": "Web3 Development",
+    "tags": ["web3", "blockchain", "development", "beginner"],
+    "image": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200",
+    "author": "Web3 Expert",
+    "createdAt": "2026-07-15T10:00:00.000Z",
+    "updatedAt": "2026-07-15T10:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Understanding DeFi: The Future of Finance",
+    "slug": "understanding-defi-the-future-of-finance",
+    "content": "## What is DeFi?\n\nDecentralized Finance (DeFi) is a financial system built on blockchain networks that operates without traditional intermediaries like banks. It enables anyone with an internet connection to access financial services.\n\n### Key DeFi Applications\n\n- **Lending & Borrowing** - Platforms like Aave and Compound\n- **Decentralized Exchanges (DEXs)** - Uniswap, SushiSwap\n- **Yield Farming** - Earning rewards by providing liquidity\n- **Staking** - Locking assets to earn rewards\n\n## Why DeFi Matters\n\nDeFi is creating a more inclusive financial system by removing barriers to entry. Users can earn interest on their assets, access loans without credit checks, and trade assets without intermediaries.\n\n### Risks in DeFi\n\n- Smart contract vulnerabilities\n- Impermanent loss\n- Regulatory uncertainty\n- Market volatility",
+    "description": "Learn about Decentralized Finance (DeFi) and how it's revolutionizing the financial industry",
+    "category": "DeFi",
+    "tags": ["defi", "finance", "blockchain", "crypto"],
+    "image": "https://images.unsplash.com/photo-1621416894567-3e5e6ffb2cfc?w=1200",
+    "author": "Crypto Analyst",
+    "createdAt": "2026-07-14T14:30:00.000Z",
+    "updatedAt": "2026-07-14T14:30:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "NFTs: Beyond Digital Art",
+    "slug": "nfts-beyond-digital-art",
+    "content": "## What are NFTs?\n\nNon-Fungible Tokens (NFTs) are unique digital assets stored on a blockchain that represent ownership of a specific item, whether digital or physical.\n\n### Use Cases Beyond Art\n\n1. **Gaming** - In-game items and characters\n2. **Real Estate** - Virtual and physical property\n3. **Identity** - Digital identities and credentials\n4. **Supply Chain** - Tracking products\n\n## The NFT Ecosystem\n\n- **Marketplaces** - OpenSea, Rarible\n- **Blockchains** - Ethereum, Solana, Polygon\n- **Standards** - ERC-721, ERC-1155\n\n### How to Create an NFT\n\n1. Choose a blockchain\n2. Create a wallet\n3. Mint your NFT\n4. List on a marketplace\n5. Promote your creation",
+    "description": "Exploring the diverse applications of NFTs beyond just digital art and collectibles",
+    "category": "NFT",
+    "tags": ["nft", "art", "gaming", "digital-assets"],
+    "image": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200",
+    "author": "NFT Artist",
+    "createdAt": "2026-07-13T09:15:00.000Z",
+    "updatedAt": "2026-07-13T09:15:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "Blockchain Scalability Solutions",
+    "slug": "blockchain-scalability-solutions",
+    "content": "## The Scalability Trilemma\n\nBlockchain networks face a trilemma balancing decentralization, security, and scalability. Achieving all three simultaneously remains a significant challenge.\n\n### Layer 2 Solutions\n\n- **Rollups** - Optimistic and ZK rollups\n- **State Channels** - Off-chain transactions\n- **Sidechains** - Independent blockchains connected to mainnet\n\n### Sharding\n\nSharding splits the blockchain into smaller, more manageable pieces called shards. Each shard processes its own transactions, increasing overall throughput.\n\n## Popular Scaling Solutions\n\n1. **Arbitrum** - Optimistic rollup for Ethereum\n2. **Optimism** - Another optimistic rollup solution\n3. **zkSync** - ZK-rollup technology\n4. **Polygon** - Sidechain and scaling solution\n\n### Future of Scalability\n\nAs blockchain adoption grows, scalability remains a key focus area for developers. New solutions are constantly being developed to address the trilemma.",
+    "description": "Understanding blockchain scalability challenges and the solutions being developed",
+    "category": "Blockchain",
+    "tags": ["blockchain", "scaling", "layer2", "technology"],
+    "image": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200",
+    "author": "Blockchain Engineer",
+    "createdAt": "2026-07-12T16:45:00.000Z",
+    "updatedAt": "2026-07-12T16:45:00.000Z"
+  }
+]

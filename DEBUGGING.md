@@ -625,3 +625,159 @@ ls -la app/api/test-db/route.ts
 # Restart dev server
 npm run dev
 ```
+
+### 10. Next.js 16 Dynamic Route Params Issue
+
+#### Error: params is a Promise
+
+**Error Message:**
+```
+Error: Route "/article/[slug]" used `params.slug`. 
+`params` is a Promise and must be unwrapped with `await` or `React.use()` 
+before accessing its properties.
+```
+
+**Cause:**
+- In Next.js 16, dynamic route `params` is now a Promise
+- Directly accessing `params.slug` without awaiting causes an error
+
+**Solution:**
+```typescript
+// ❌ Wrong (Next.js 15 style)
+interface ArticlePageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function ArticlePage({ params }: ArticlePageProps) {
+  const article = getArticleBySlug(params.slug);
+  // ...
+}
+
+// ✅ Correct (Next.js 16 style)
+interface ArticlePageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default async function ArticlePage({ params }: ArticlePageProps) {
+  const { slug } = await params;
+  const article = getArticleBySlug(slug);
+  // ...
+}
+```
+
+#### Error: Route "/article/[slug]" 404 Not Found
+
+**Error Message:**
+```
+GET /article/getting-started-with-web3-development 404 in 6.6s
+```
+
+**Cause:**
+- Dynamic route not properly configured
+- params not being resolved correctly
+- Missing `generateStaticParams` or wrong implementation
+
+**Solution:**
+```typescript
+// 1. Fix params as Promise
+// 2. Ensure generateStaticParams returns correct format
+export async function generateStaticParams() {
+  const articles = getAllArticles();
+  return articles.map((article) => ({
+    slug: article.slug,
+  }));
+}
+
+// 3. Check folder structure
+// app/article/[slug]/page.tsx ✅
+// app/article/[slug]/page.ts ❌
+```
+
+### 11. Next.js 16 Breaking Changes
+
+#### Summary of Changes
+
+| Feature | Next.js 15 | Next.js 16 |
+|---------|------------|------------|
+| `params` type | `params: { slug: string }` | `params: Promise<{ slug: string }>` |
+| `searchParams` type | `searchParams: { q: string }` | `searchParams: Promise<{ q: string }>` |
+| Accessing params | `params.slug` | `await params` then `.slug` |
+
+#### Migration Guide
+
+**Before (Next.js 15):**
+```typescript
+interface PageProps {
+  params: { slug: string };
+  searchParams: { q?: string };
+}
+
+export default function Page({ params, searchParams }: PageProps) {
+  const { slug } = params;
+  const { q } = searchParams;
+}
+```
+
+**After (Next.js 16):**
+```typescript
+interface PageProps {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ q?: string }>;
+}
+
+export default async function Page({ params, searchParams }: PageProps) {
+  const { slug } = await params;
+  const { q } = await searchParams;
+}
+```
+
+### 12. Article Detail Page - Common Errors
+
+#### Error: Cannot read properties of undefined (reading 'map')
+
+**Error Message:**
+```
+Cannot read properties of undefined (reading 'map')
+```
+
+**Cause:**
+- Tags array is undefined or null
+- Article data missing required fields
+
+**Solution:**
+```typescript
+// Always provide fallback values
+{article.tags?.map((tag) => (
+  <span key={tag}>{tag}</span>
+))}
+
+// Or default empty array
+const tags = article.tags || [];
+```
+
+#### Error: Content not rendering
+
+**Error Message:**
+```
+Content shows raw markdown instead of HTML
+```
+
+**Cause:**
+- Not parsing markdown before rendering
+- Missing `dangerouslySetInnerHTML`
+
+**Solution:**
+```typescript
+import { parseMarkdown } from '@/lib/markdown';
+
+// Parse before rendering
+const parsedContent = parseMarkdown(article.content);
+
+// Render with dangerouslySetInnerHTML
+<div dangerouslySetInnerHTML={{ __html: parsedContent }} />
+```
+---

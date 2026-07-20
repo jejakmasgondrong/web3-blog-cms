@@ -18,9 +18,9 @@ interface ArticleCardProps {
 export default function ArticleCard({ article }: ArticleCardProps) {
   return (
     <Link href={`/article/${article.slug}`}>
-      <article className="group bg-gray-900/50 rounded-xl overflow-hidden hover:bg-gray-900 transition-all duration-300 hover:scale-[1.02]">
+      <article className="group bg-gray-900/50 rounded-xl overflow-hidden hover:bg-gray-900 transition-all duration-300 hover:scale-[1.02] h-full flex flex-col">
         {article.image && (
-          <div className="relative h-48 overflow-hidden">
+          <div className="relative h-48 overflow-hidden flex-shrink-0">
             <img
               src={article.image}
               alt={article.title}
@@ -30,7 +30,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           </div>
         )}
         
-        <div className="p-6">
+        <div className="p-6 flex flex-col flex-1">
           <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
             <time dateTime={article.createdAt}>
               {formatDate(article.createdAt)}
@@ -39,11 +39,11 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             <span>{getRelativeTime(article.createdAt)}</span>
           </div>
           
-          <h2 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
+          <h2 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
             {article.title}
           </h2>
           
-          <p className="text-gray-400 mb-4 line-clamp-2">
+          <p className="text-gray-400 mb-4 line-clamp-2 flex-1">
             {article.description}
           </p>
           
