@@ -1,5 +1,6 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+'use client';
+
+import { usePathname } from 'next/navigation';
 
 interface SEOHeadProps {
   title?: string;
@@ -26,9 +27,9 @@ export default function SEOHead({
   tags = [],
   noIndex = false,
 }: SEOHeadProps) {
-  const router = useRouter();
+  const pathname = usePathname();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-  const fullUrl = `${siteUrl}${router.asPath}`;
+  const fullUrl = `${siteUrl}${pathname || ''}`;
   const defaultImage = `${siteUrl}/og-image.png`;
 
   const seoTitle = title 
@@ -37,9 +38,9 @@ export default function SEOHead({
 
   const seoDescription = description || 'Explore the world of Web3, blockchain, and cryptocurrency';
 
+  // Untuk head tags, kita pake next/head langsung
   return (
-    <Head>
-      {/* Basic Meta */}
+    <>
       <title>{seoTitle}</title>
       <meta name="description" content={seoDescription} />
       <link rel="canonical" href={fullUrl} />
@@ -81,6 +82,6 @@ export default function SEOHead({
       {/* Additional */}
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="theme-color" content="#0a0a0a" />
-    </Head>
+    </>
   );
 }
