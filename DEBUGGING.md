@@ -630,18 +630,18 @@ npm run dev
 
 #### Error: params is a Promise
 
-**Error Message:**
+Error Message:
 ```
 Error: Route "/article/[slug]" used `params.slug`. 
 `params` is a Promise and must be unwrapped with `await` or `React.use()` 
 before accessing its properties.
 ```
 
-**Cause:**
+Cause:
 - In Next.js 16, dynamic route `params` is now a Promise
 - Directly accessing `params.slug` without awaiting causes an error
 
-**Solution:**
+Solution:
 ```typescript
 // ❌ Wrong (Next.js 15 style)
 interface ArticlePageProps {
@@ -671,17 +671,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
 #### Error: Route "/article/[slug]" 404 Not Found
 
-**Error Message:**
+Error Message:
 ```
 GET /article/getting-started-with-web3-development 404 in 6.6s
 ```
 
-**Cause:**
+Cause:
 - Dynamic route not properly configured
 - params not being resolved correctly
 - Missing `generateStaticParams` or wrong implementation
 
-**Solution:**
+Solution:
 ```typescript
 // 1. Fix params as Promise
 // 2. Ensure generateStaticParams returns correct format
@@ -709,7 +709,7 @@ export async function generateStaticParams() {
 
 #### Migration Guide
 
-**Before (Next.js 15):**
+Before (Next.js 15):
 ```typescript
 interface PageProps {
   params: { slug: string };
@@ -722,7 +722,7 @@ export default function Page({ params, searchParams }: PageProps) {
 }
 ```
 
-**After (Next.js 16):**
+After (Next.js 16):
 ```typescript
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -739,16 +739,16 @@ export default async function Page({ params, searchParams }: PageProps) {
 
 #### Error: Cannot read properties of undefined (reading 'map')
 
-**Error Message:**
+Error Message:
 ```
 Cannot read properties of undefined (reading 'map')
 ```
 
-**Cause:**
+Cause:
 - Tags array is undefined or null
 - Article data missing required fields
 
-**Solution:**
+Solution:
 ```typescript
 // Always provide fallback values
 {article.tags?.map((tag) => (
@@ -761,16 +761,16 @@ const tags = article.tags || [];
 
 #### Error: Content not rendering
 
-**Error Message:**
+Error Message:
 ```
 Content shows raw markdown instead of HTML
 ```
 
-**Cause:**
+Cause:
 - Not parsing markdown before rendering
 - Missing `dangerouslySetInnerHTML`
 
-**Solution:**
+Solution:
 ```typescript
 import { parseMarkdown } from '@/lib/markdown';
 
@@ -779,5 +779,169 @@ const parsedContent = parseMarkdown(article.content);
 
 // Render with dangerouslySetInnerHTML
 <div dangerouslySetInnerHTML={{ __html: parsedContent }} />
+
+---
+
+### 13. Server Components vs Client Components - fs Module Error
+
+#### Error: Module not found: Can't resolve 'fs'
+
+Error Message:
+```
+Module not found: Can't resolve 'fs'
+Import traces:
+  Client Component Browser:
+    ./lib/db.ts [Client Component Browser]
+    ./app/admin/page.tsx [Client Component Browser]
+```
+
+Cause:
+- `fs` (Node.js file system module) cannot run in the browser
+- Using `lib/db.ts` in a Client Component (`'use client'`)
+- Server-only code imported into client bundle
+
+Solution:
+```typescript
+// ❌ Wrong - db.ts imported in client component
+// app/admin/page.tsx
+'use client';
+import { getAllArticles } from '@/lib/db'; // Error! fs can't run in browser
+
+// ✅ Correct - Use Server Component
+// app/admin/page.tsx (no 'use client')
+import { getAllArticles } from '@/lib/db'; // Works! Runs on server
+
+export default async function AdminPage() {
+  const articles = getAllArticles(); // Server-side
+  // ...
+}
+```
+
+Alternative: Server Actions
+```typescript
+// app/admin/actions.ts
+'use server';
+import { deleteArticle } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+
+export async function deleteArticleAction(slug: string) {
+  const success = deleteArticle(slug);
+  revalidatePath('/admin');
+  return success;
+}
+```
+
+### 14. Event Handler in Server Component Error
+
+#### Error: Event handlers cannot be passed to Client Component props
+
+Error Message:
+```
+Event handlers cannot be passed to Client Component props.
+<button type="submit" onClick={function onClick}>
+```
+
+Cause:
+- Server Components cannot use event handlers (`onClick`, `onChange`, etc.)
+- Button with `onClick` in a Server Component
+
+Solution:
+```typescript
+// ❌ Wrong - Server Component with onClick
+// app/admin/page.tsx (Server Component)
+<button onClick={() => deleteArticle(slug)}>Delete</button>
+
+// ✅ Correct - Extract to Client Component
+// components/admin/DeleteButton.tsx
+'use client';
+export default function DeleteButton({ slug }) {
+  const handleDelete = () => { /* ... */ };
+  return <button onClick={handleDelete}>Delete</button>;
+}
+
+// app/admin/page.tsx (Server Component)
+import DeleteButton from '@/components/admin/DeleteButton';
+<DeleteButton slug={slug} />
+```
+
+### 15. Module Resolution Error
+
+#### Error: Module not found: Can't resolve '@/components/admin/DeleteButton'
+
+Error Message:
+```
+Module not found: Can't resolve '@/components/admin/DeleteButton'
+```
+
+Cause:
+- File doesn't exist yet
+- Wrong path or casing
+- Folder not created
+
+Solution:
+```bash
+# Create folder and file
+mkdir -p components/admin
+cat > components/admin/DeleteButton.tsx << 'EOF'
+'use client';
+// ... component code
+EOF
+```
+
+### 16. Server Actions Best Practices
+
+#### Summary: When to Use What
+
+| Use Case | Solution | Example |
+|----------|----------|---------|
+| Reading data | Server Component | `app/admin/page.tsx` |
+| Writing data | Server Action | `app/admin/actions.ts` |
+| User interaction | Client Component | `DeleteButton.tsx` |
+| Database operations | Server-only (lib/db.ts) | `lib/db.ts` |
+
+#### Server Component Rules
+- ✅ Can use `fs`, `path`, database directly
+- ✅ Can be `async` and `await`
+- ✅ Can import server-only modules
+- ❌ Cannot use `useState`, `useEffect`, event handlers
+- ❌ Cannot use browser APIs
+
+#### Client Component Rules
+- ✅ Can use `useState`, `useEffect`, event handlers
+- ✅ Can use browser APIs
+- ❌ Cannot use `fs`, `path`, database directly
+- ❌ Must use Server Actions for data mutations
+
+#### Server Action Rules
+- ✅ Use `'use server'` directive
+- ✅ Can use server-only modules
+- ✅ Can revalidate paths with `revalidatePath`
+- ✅ Called from Client Components
+- ❌ Cannot be called directly from Server Components
+
+### 17. Transition Hook for Loading States
+
+#### Using useTransition for Async Actions
+
+```typescript
+'use client';
+import { useTransition } from 'react';
+import { deleteArticleAction } from '@/app/admin/actions';
+
+export default function DeleteButton({ slug }) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      await deleteArticleAction(slug);
+    });
+  };
+
+  return (
+    <button disabled={isPending}>
+      {isPending ? 'Deleting...' : 'Delete'}
+    </button>
+  );
+}
 ```
 ---
