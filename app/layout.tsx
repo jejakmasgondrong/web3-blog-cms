@@ -1,19 +1,23 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import SolanaProvider from '@/components/web3/SolanaProvider';
 
-const inter = Inter({ subsets: ['latin'] })
+// Import Solana wallet adapter styles
+import '@solana/wallet-adapter-react-ui/styles.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
     default: 'Web3 Blog CMS',
-    template: '%s | Web3 Blog CMS'
+    template: '%s | Web3 Blog CMS',
   },
   description: 'A modern, SEO-optimized blog CMS with Web3 integration',
-  keywords: ['Web3', 'Blockchain', 'Blog', 'CMS', 'Cryptocurrency'],
+  keywords: ['Web3', 'Blockchain', 'Blog', 'CMS', 'Cryptocurrency', 'Solana'],
   authors: [{ name: 'Web3 Blog Team' }],
   creator: 'Web3 Blog Team',
   publisher: 'Web3 Blog',
@@ -29,15 +33,15 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Web3 Blog CMS'
-      }
-    ]
+        alt: 'Web3 Blog CMS',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Web3 Blog CMS',
     description: 'A modern, SEO-optimized blog CMS with Web3 integration',
-    images: ['/og-image.png']
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -47,28 +51,28 @@ export const metadata: Metadata = {
       follow: true,
       'max-video-preview': -1,
       'max-image-preview': 'large',
-      'max-snippet': -1
-    }
+      'max-snippet': -1,
+    },
   },
   verification: {
-    google: 'your-google-verification-code'
-  }
-}
+    google: 'your-google-verification-code',
+  },
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-black text-white min-h-screen flex flex-col`}>
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <SolanaProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SolanaProvider>
       </body>
     </html>
-  )
+  );
 }
