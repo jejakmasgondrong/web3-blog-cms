@@ -12,6 +12,7 @@ export interface Article {
   updatedAt: string
   excerpt?: string
   coverImage?: string
+  author?: string  // Tambahkan author
 }
 
 // Mock data
@@ -26,6 +27,7 @@ let articles: Article[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     excerpt: 'Welcome to the world of Web3 blogging.',
+    author: 'Admin',
   },
   {
     id: '2',
@@ -37,6 +39,7 @@ let articles: Article[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     excerpt: 'Start your Solana journey here.',
+    author: 'Admin',
   },
 ]
 
@@ -60,70 +63,136 @@ export function getArticlesByTag(tag: string): Article[] {
   return articles.filter(article => article.tags?.includes(tag))
 }
 
-// Get all categories
+// Get all categories// Get all categories
+export function getCategories(): string[]
 export function getCategories(): string[] {
-  const categories = new Set(articles.map(article => article.category).filter(Boolean))
+  const categories = new Set( {
+  const categories = new Set(articles.map(articlearticles.map(article => article.category).filter(Boolean))
+ => article.category).filter(Boolean))
   return Array.from(categories) as string[]
 }
 
-// Get all tags
+  return Array.from(categories) as string[]
+}
+
+// Get// Get all tags
+ all tags
 export function getTags(): string[] {
-  const tags = new Set(articles.flatMap(article => article.tags || []))
-  return Array.from(tags)
+  const tagsexport function getTags(): string[] {
+  const tags = = new Set(articles.flatMap(article => article new Set(articles.flatMap(article => article.tags || []))
+  return Array.from.tags || []))
+  return Array.from(tags(tags)
+}
+
+// Search articles
+export function searchArticles)
 }
 
 // Search articles
 export function searchArticles(query: string): Article[] {
   const lowerQuery = query.toLowerCase()
+ (query: string): Article[] {
+  const lowerQuery = query.toLowerCase()
   return articles.filter(article =>
+    article.title.toLowerCase().includes return articles.filter(article =>
     article.title.toLowerCase().includes(lowerQuery) ||
+   (lowerQuery) ||
     article.content.toLowerCase().includes(lowerQuery) ||
-    article.excerpt?.toLowerCase().includes(lowerQuery)
+ article.content.toLowerCase().includes(lowerQuery) ||
+    article.excerpt?.toLowerCase().    article.excerpt?.toLowerCase().includes(lowerQueryincludes(lowerQuery)
   )
 }
 
-// Get related articles (based on category or tags)
+// Get related articles)
+  )
+}
+
+// Get related articles (based on category (based on category or tags)
+export function getRelatedArticles(s or tags)
 export function getRelatedArticles(slug: string, limit: number = 3): Article[] {
-  const article = getArticleBySlug(slug)
+ lug: string, limit: number = 3): Article[] {
+  const article = getArticleBySlug(slug const article = getArticleBySlug(slug)
+  if)
   if (!article) return []
 
+  const related = articles.filter (!article) return []
+
   const related = articles.filter(a =>
+    a.slug !== slug(a =>
     a.slug !== slug &&
+    (a.category === article.category &&
     (a.category === article.category ||
-     a.tags?.some(tag => article.tags?.includes(tag)))
+     a.tags?.some(tag => article ||
+     a.tags?.some(tag => article.tags?.includes(t.tags?.includes(tag)))
+  )
+
+  return related.slice(0,ag)))
   )
 
   return related.slice(0, limit)
 }
 
 // Create article
-export function createArticle(article: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Article {
-  const newArticle: Article = {
+export limit)
+}
+
+// Create article
+export function createArticle( function createArticle(article: Omit<Article, 'article: Omit<Article, 'id' | 'id' | 'createdAt' | 'updatedAt'>): Article {
+createdAt' | 'updatedAt'>): Article {
+  const newArticle:  const newArticle: Article = {
+    ...article,
+    id: String(Date Article = {
     ...article,
     id: String(Date.now()),
+    createdAt.now()),
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+: new Date().toISOString(),
+    updatedAt: new Date    updatedAt: new Date().toISOString(),
+   ().toISOString(),
+    author: article.author || author: article.author || 'Admin',
+  }
+  'Admin',
   }
   articles = [newArticle, ...articles]
+  return new articles = [newArticle, ...articles]
   return newArticle
 }
 
 // Delete article
-export function deleteArticle(id: string): boolean {
+export function deleteArticle(id: string): booleanArticle
+}
+
+// Delete article
+export function deleteArticle(id {
+  const initial: string): boolean {
   const initialLength = articles.length
-  articles = articles.filter(article => article.id !== id)
-  return articles.length < initialLength
+Length = articles.length
+  articles = articles.filter(article  articles = articles.filter(article => article.id !== id)
+  => article.id !== id)
+  return articles.length return articles.length < initialLength
 }
 
 // Update article
-export function updateArticle(id: string, data: Partial<Article>): Article | undefined {
-  const index = articles.findIndex(article => article.id === id)
+ < initialLength
+}
+
+// Update article
+export function updateArticleexport function updateArticle(id: string, data: Partial<Article>): Article(id: string, data: Partial<Article>): Article | | undefined {
+  const index = articles undefined {
+  const index = articles.findIndex(article => article.id ===.findIndex(article => article.id === id)
+  if id)
   if (index === -1) return undefined
+
+  articles[index (index === -1) return undefined
 
   articles[index] = {
     ...articles[index],
+] = {
+    ...articles[index],
+    ...data,
     ...data,
     updatedAt: new Date().toISOString(),
+     updatedAt: new Date().toISOString(),
   }
   return articles[index]
 }
