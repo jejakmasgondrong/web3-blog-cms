@@ -33,7 +33,7 @@ export default function ArticleForm({ onSubmit, submitLabel = 'Submit', initialD
       title,
       content,
       category,
-      tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+      tags: tags.split(',').map((t: string) => t.trim()).filter(Boolean),
       excerpt,
       slug: title.toLowerCase().replace(/ /g, '-'),
     };
@@ -74,7 +74,7 @@ export default function ArticleForm({ onSubmit, submitLabel = 'Submit', initialD
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800"
         >
           <option value="">Select category</option>
-          {categories.map((cat) => (
+          {categories.map((cat: string) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
