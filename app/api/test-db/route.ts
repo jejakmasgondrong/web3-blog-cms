@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
-import {
-  getAllArticles,
-  getArticleBySlug,
+import { 
+  getAllArticles, 
+  getArticleBySlug, 
+  getArticlesByCategory,
+  getArticlesByTag,
   getCategories,
   getTags,
-  getRelatedArticles,
   searchArticles,
+  getRelatedArticles
 } from '@/lib/db';
 
 export async function GET() {
@@ -13,35 +15,26 @@ export async function GET() {
     const articles = getAllArticles();
     const categories = getCategories();
     const tags = getTags();
-    const article = getArticleBySlug('getting-started-with-web3-development');
-    const related = article ? getRelatedArticles(article, 3) : [];
+    const article = getArticleBySlug('getting-started-with-solana');
+    const related = article ? getRelatedArticles(article.slug, 3) : [];
     const searchResults = searchArticles('blockchain');
 
     return NextResponse.json({
       success: true,
       data: {
         totalArticles: articles.length,
-        articles: articles.map(a => ({ 
-          id: a.id, 
-          title: a.title, 
-          category: a.category,
-          tags: a.tags 
-        })),
         categories,
         tags,
-        sampleArticle: article ? {
-          title: article.title,
-          author: article.author,
-          category: article.category,
-        } : null,
-        relatedArticles: related.map(r => r.title),
-        searchResults: searchResults.map(r => r.title),
-      }
+        article,
+        relatedArticles: related,
+        searchResults,
+      },
     });
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    console.error('Test DB error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch data' },
+      { status: 500 }
+    );
   }
 }
