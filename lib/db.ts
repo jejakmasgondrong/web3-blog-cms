@@ -1,4 +1,4 @@
-import fs from 'fs';
+// import fs from 'fs';
 import path from 'path';
 import { Article, ArticleInput, ArticleFilters, Category, Tag } from '@/types';
 import { slugify } from '@/utils/slugify';
