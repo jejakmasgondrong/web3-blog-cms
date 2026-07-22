@@ -1,67 +1,54 @@
-import { getArticlesByTag, getTags } from '@/lib/db';
-import ArticleList from '@/components/articles/ArticleList';
-import SEOHead from '@/components/common/SEOHead';
+import { getTags, getArticlesByTag } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
-interface TagPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
-export default async function TagPage({ params }: TagPageProps) {
-  const { slug } = await params;
+export default async function TagPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   
-  // Get all tags for validation
+  // Get tags
   const tags = getTags();
-  const tag = tags.find(t => t.slug === slug);
   
-  if (!tag) {
+  // Validate tag exists
+  if (!tags.includes(slug)) {
     notFound();
   }
 
-  // Get articles with this tag
-  const articles = getArticlesByTag(tag.name);
+  // Get articles for this tag
+  const articles = getArticlesByTag(slug);
 
   return (
-    <>
-      <SEOHead
-        title={`#${tag.name} Articles`}
-        description={`Read all articles tagged with #${tag.name} on Web3 Blog`}
-        type="website"
-      />
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      <Link href="/" className="text-blue-600 hover:underline mb-8 inline-block">
+        ← Back to Home
+      </Link>
+      
+      <h1 className="text-4xl font-bold mb-2">#{slug}</h1>
+      <p className="text-gray-600 dark:text-gray-400 mb-8">
+        {articles.length} articles with this tag
+      </p>
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-          <Link href="/" className="hover:text-white transition-colors">Home</Link>
-          <span>›</span>
-          <span className="text-white">#{tag.name}</span>
+      {articles.length === 0 ? (
+        <p className="text-gray-500 dark:text-gray-400">No articles found with this tag.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {articles.map((article) => (
+            <Link
+              key={article.id}
+              href={`/article/${article.slug}`}
+              className="block border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow bg-white dark:bg-gray-800"
+            >
+              <h2 className="text-xl font-semibold mb-2">{article.title}</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+                {article.excerpt || article.content.substring(0, 150) + '...'}
+              </p>
+              <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                <span>{article.author || 'Admin'}</span>
+                <span>{new Date(article.createdAt).toLocaleDateString()}</span>
+              </div>
+            </Link>
+          ))}
         </div>
-
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">
-            Articles tagged with <span className="text-blue-400">#{tag.name}</span>
-          </h1>
-          <p className="text-gray-400">
-            Found {articles.length} article{articles.length !== 1 ? 's' : ''} with this tag
-          </p>
-        </div>
-
-        {/* Articles */}
-        <ArticleList articles={articles} />
-      </div>
-    </>
+      )}
+    </div>
   );
-}
-
-// Generate static paths for all tags
-export async function generateStaticParams() {
-  const tags = getTags();
-  
-  return tags.map((tag) => ({
-    slug: tag.slug,
-  }));
 }
