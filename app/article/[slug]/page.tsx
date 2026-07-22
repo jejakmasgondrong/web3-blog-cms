@@ -1,118 +1,97 @@
-import { getArticleBySlug, getRelatedArticles, getAllArticles } from '@/lib/db';
+import { getArticleBySlug, getAllArticles, getRelatedArticles } from '@/lib/db';
 import { parseMarkdown } from '@/lib/markdown';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { formatDate, getRelativeTime } from '@/utils/date';
+import { notFound } from 'next/navigation';
 
-interface ArticlePageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
-export default async function ArticlePage({ params }: ArticlePageProps) {
-  const { slug } = await params;
-  const article = getArticleBySlug(slug);
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  const article = getArticleBySlug(params.slug);
   
   if (!article) {
     notFound();
   }
 
-  // Parse markdown content
-  const parsedContent = parseMarkdown(article.content);
-  const readingTime = Math.ceil(article.content.split(/\s+/).length / 200);
+  const relatedArticles = getRelatedArticles(params.slug, 3);
+  const parsedContent = await parseMarkdown(article.content);
 
   return (
-    <>
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <article>
-          {/* Header */}
-          <header className="mb-8">
-            <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
-              <time dateTime={article.createdAt}>
-                {formatDate(article.createdAt)}
-              </time>
-              <span>•</span>
-              <span>{getRelativeTime(article.createdAt)}</span>
-              <span>•</span>
-              <span>{readingTime} min read</span>
-            </div>
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      {/* Back button */}
+      <Link href="/" className="text-blue-600 hover:underline mb-8 inline-block">
+        ← Back to Home
+      </Link>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {article.title}
-            </h1>
-
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                  <span className="text-white font-bold">
-                    {article.author?.[0] || 'A'}
-                  </span>
-                </div>
-                <div>
-                  <div className="font-semibold">{article.author || 'Anonymous'}</div>
-                  <div className="text-sm text-gray-400">Writer</div>
-                </div>
-              </div>
-            </div>
-
-            {article.image && (
-              <div className="relative h-96 w-full rounded-xl overflow-hidden mb-8">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="object-cover w-full h-full"
-                  loading="lazy"
-                />
-              </div>
-            )}
-
-            {/* Category & Tags */}
-            <div className="flex flex-wrap gap-2">
-              <Link
-                href={`/category/${article.category?.toLowerCase() || 'uncategorized'}`}
-                className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-full text-sm hover:bg-blue-600/30 transition-colors"
-              >
-                {article.category}
-              </Link>
-              {article.tags?.map((tag) => (
-                <Link
-                  key={tag}
-                  href={`/tag/${tag.toLowerCase()}`}
-                  className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm hover:bg-gray-700 transition-colors"
-                >
-                  #{tag}
-                </Link>
-              ))}
-            </div>
-          </header>
-
-          {/* Content */}
-          <div
-            className="prose prose-invert prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: parsedContent }}
-          />
-
-          {/* Back to Home */}
-          <div className="mt-12 pt-8 border-t border-gray-800">
+      {/* Article Header */}
+      <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
+      
+      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-8">
+        <span>{article.author || 'Admin'}</span>
+        <span>•</span>
+        <span>{new Date(article.createdAt).toLocaleDateString()}</span>
+        {article.category && (
+          <>
+            <span>•</span>
             <Link
-              href="/"
-              className="text-blue-400 hover:text-blue-300 transition-colors"
+              href={`/category/${article.category.toLowerCase()}`}
+              className="text-blue-600 hover:underline"
             >
-              ← Back to all articles
+              {article.category}
             </Link>
-          </div>
-        </article>
+          </>
+        )}
       </div>
-    </>
-  );
-}
 
-// Generate static paths for all articles
-export async function generateStaticParams() {
-  const articles = getAllArticles();
-  
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
+      {/* Cover Image */}
+      {article.image && (
+        <div className="relative h-96 w-full rounded-xl overflow-hidden mb-8">
+          <img
+            src={article.image}
+            alt={article.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* Article Content */}
+      <div 
+        className="prose prose-lg dark:prose-invert max-w-none"
+        dangerouslySetInnerHTML={{ __html: parsedContent }}
+      />
+
+      {/* Tags */}
+      {article.tags && article.tags.length > 0 && (
+        <div className="mt-8 flex flex-wrap gap-2">
+          {article.tags.map((tag) => (
+            <Link
+              key={tag}
+              href={`/tag/${tag.toLowerCase()}`}
+              className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            >
+              #{tag}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Related Articles */}
+      {relatedArticles.length > 0 && (
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {relatedArticles.map((related) => (
+              <Link
+                key={related.id}
+                href={`/article/${related.slug}`}
+                className="block border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg transition-shadow"
+              >
+                <h3 className="font-semibold mb-2">{related.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {related.excerpt || 'Read more...'}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

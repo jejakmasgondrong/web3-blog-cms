@@ -5,45 +5,33 @@ import {
   generateTOC,
   extractFirstImage,
   getReadingTime,
-  generateExcerpt
+  generateExcerpt,
 } from '@/lib/markdown';
 
-const testMarkdown = `
-# Getting Started with Web3
-
-Web3 is the **future** of the internet.
-
-## What is Web3?
-
-Web3 represents the next generation of the internet.
-
-### Key Components
-
-1. Blockchain
-2. Smart Contracts
-3. Cryptocurrency
-
-![Web3 Image](https://example.com/web3.jpg)
-
-> Web3 is the future.
-
-## Getting Started
-
-To get started with Web3, you need to learn:
-
-- Solidity
-- Rust
-- JavaScript
-`;
-
 export async function GET() {
+  const testMarkdown = `
+# Hello World
+
+This is a test markdown content.
+
+## Section 1
+
+Some content here.
+
+![Image](https://example.com/image.jpg)
+
+## Section 2
+
+More content.
+  `;
+
   try {
-    const html = parseMarkdown(testMarkdown);
-    const plainText = extractPlainText(testMarkdown);
+    const html = await parseMarkdown(testMarkdown);
+    const plainText = await extractPlainText(testMarkdown);
     const toc = generateTOC(testMarkdown);
-    const firstImage = extractFirstImage(testMarkdown);
-    const readingTime = getReadingTime(testMarkdown);
-    const excerpt = generateExcerpt(testMarkdown, 100);
+    const image = extractFirstImage(testMarkdown);
+    const readingTime = await getReadingTime(testMarkdown);
+    const excerpt = await generateExcerpt(testMarkdown, 100);
 
     return NextResponse.json({
       success: true,
@@ -51,15 +39,16 @@ export async function GET() {
         html,
         plainText,
         toc,
-        firstImage,
-        readingTime: `${readingTime} min read`,
+        image,
+        readingTime,
         excerpt,
-      }
+      },
     });
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    console.error('Markdown test error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to parse markdown' },
+      { status: 500 }
+    );
   }
 }

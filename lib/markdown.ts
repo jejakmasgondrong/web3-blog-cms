@@ -7,16 +7,16 @@ marked.setOptions({
 });
 
 // Parse markdown to HTML
-export function parseMarkdown(content: string): string {
-  return marked.parse(content);
+export async function parseMarkdown(content: string): Promise<string> {
+  return await marked.parse(content);
 }
 
 // Alias for parseMarkdown
 export const renderMarkdown = parseMarkdown;
 
 // Extract plain text from markdown
-export function extractPlainText(markdown: string): string {
-  const html = parseMarkdown(markdown);
+export async function extractPlainText(markdown: string): Promise<string> {
+  const html = await parseMarkdown(markdown);
   // Remove HTML tags
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
@@ -47,15 +47,15 @@ export function extractFirstImage(markdown: string): string | null {
 }
 
 // Calculate reading time (approx 200 words per minute)
-export function getReadingTime(markdown: string): number {
-  const plainText = extractPlainText(markdown);
+export async function getReadingTime(markdown: string): Promise<number> {
+  const plainText = await extractPlainText(markdown);
   const words = plainText.split(/\s+/).length;
   return Math.max(1, Math.ceil(words / 200));
 }
 
 // Generate excerpt from markdown (first 150 characters)
-export function generateExcerpt(markdown: string, maxLength: number = 150): string {
-  const plainText = extractPlainText(markdown);
+export async function generateExcerpt(markdown: string, maxLength: number = 150): Promise<string> {
+  const plainText = await extractPlainText(markdown);
   return plainText.length > maxLength 
     ? plainText.substring(0, maxLength) + '...' 
     : plainText;
