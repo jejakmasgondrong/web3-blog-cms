@@ -4,7 +4,6 @@ import { marked } from 'marked';
 marked.setOptions({
   gfm: true,
   breaks: true,
-  mangle: false,
 });
 
 // Parse markdown to HTML
