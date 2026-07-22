@@ -70,7 +70,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {/* Category & Tags */}
             <div className="flex flex-wrap gap-2">
               <Link
-                href={`/category/${article.category.toLowerCase()}`}
+                href={`/category/${article.category?.toLowerCase() || 'uncategorized'}`}
                 className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-full text-sm hover:bg-blue-600/30 transition-colors"
               >
                 {article.category}
