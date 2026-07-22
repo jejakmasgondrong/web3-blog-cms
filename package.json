@@ -18,6 +18,7 @@
     "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/wallet-adapter-wallets": "^0.19.32",
     "@solana/web3.js": "^1.87.6",
+    "@tailwindcss/postcss": "^4.3.3",
     "date-fns": "^2.30.0",
     "gray-matter": "^4.0.3",
     "marked": "^11.1.1",
