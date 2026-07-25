@@ -47,6 +47,6 @@ export default function ConnectWallet() {
 
   // Disconnected state - custom button
   return (
-    <WalletMultiButton className="!bg-gradient-to-r !from-blue-500 !to-purple-500 hover:!opacity-90 !transition-opacity !text-white !font-medium !text-sm !px-4 !py-2 !rounded-lg !border-none !shadow-none !h-auto !min-h-0" />
+    <WalletMultiButton className="!bg-gradient-to-r !from-blue-500 !to-purple-500 hover:!opacity-90 !transition-opacity !text-white !font-medium !text-sm !px-3 !py-2 !rounded-lg !border-none !shadow-none !h-auto !min-h-0 !max-w-[110px] sm:!max-w-none !truncate" />
   );
 }
