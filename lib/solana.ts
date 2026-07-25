@@ -2,7 +2,7 @@ import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 
-// ✅ Boleh pake NEXT_PUBLIC karena ini cuma RPC URL public
+// ✅ Using NEXT_PUBLIC because this is just a public RPC URL
 const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || clusterApiUrl('devnet');
 
 // Solana connection

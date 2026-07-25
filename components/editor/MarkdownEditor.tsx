@@ -4,7 +4,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-markdown-editor-lite/lib/index.css';
 
-// Dynamic import untuk menghindari SSR issues
+// Dynamic import to avoid SSR issues
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
   ssr: false,
   loading: () => (

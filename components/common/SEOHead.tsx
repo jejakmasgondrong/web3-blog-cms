@@ -38,7 +38,7 @@ export default function SEOHead({
 
   const seoDescription = description || 'Explore the world of Web3, blockchain, and cryptocurrency';
 
-  // Untuk head tags, kita pake next/head langsung
+  // Use next/head directly for head tags
   return (
     <>
       <title>{seoTitle}</title>

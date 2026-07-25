@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Tambah custom colors kalo perlu
+        // Add custom colors if needed
       },
     },
   },
