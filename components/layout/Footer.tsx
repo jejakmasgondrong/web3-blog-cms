@@ -13,6 +13,7 @@ export default function Footer() {
           <div className="flex gap-6 text-sm text-gray-400">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <Link href="/admin" className="hover:text-white transition-colors">Admin</Link>
+            <a href="https://www.linkedin.com/in/rsatriya-wicaksana-56b026ab/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Contact Me</a>
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
             <a href="#" className="hover:text-white transition-colors">Terms</a>
           </div>
