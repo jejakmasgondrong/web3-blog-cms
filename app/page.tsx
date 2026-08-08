@@ -6,7 +6,14 @@ export default async function HomePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8">Welcome to Web3 Blog CMS</h1>
+      <h1 className="text-4xl font-bold mb-4">Welcome to Web3 Blog CMS</h1>
+      <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+        A modern blog content management system built with Next.js and the
+        Solana ecosystem. Publish and manage articles, connect your Solana
+        wallet to author content, and showcase stories about blockchain,
+        DeFi, Web3 development, and digital assets — all served fast with
+        SEO-friendly markup out of the box.
+      </p>
       
       {articles.length === 0 ? (
         <p className="text-gray-500 dark:text-gray-400">No articles yet.</p>
