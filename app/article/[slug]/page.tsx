@@ -1,6 +1,7 @@
 import { getArticleBySlug, getAllArticles, getRelatedArticles } from '@/lib/db';
 import { parseMarkdown } from '@/lib/markdown';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
@@ -43,10 +44,13 @@ export default async function ArticlePage({ params }: { params: { slug: string }
       {/* Cover Image */}
       {article.image && (
         <div className="relative h-96 w-full rounded-xl overflow-hidden mb-8">
-          <img
+          <Image
             src={article.image}
             alt={article.title}
-            className="w-full h-full object-cover"
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover"
           />
         </div>
       )}

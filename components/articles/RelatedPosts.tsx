@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { formatDate } from '@/utils/date';
 
 interface RelatedPostsProps {
@@ -18,11 +19,12 @@ export default function RelatedPosts({ articles, currentSlug }: RelatedPostsProp
             <div className="bg-gray-900/50 rounded-lg p-4 hover:bg-gray-900 transition-colors">
               {article.image && (
                 <div className="relative h-40 rounded-lg overflow-hidden mb-3">
-                  <img
+                  <Image
                     src={article.image}
                     alt={article.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover"
                   />
                 </div>
               )}
