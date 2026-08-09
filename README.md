@@ -1,209 +1,132 @@
-# Web3 Blog CMS
+# 📝 Web3 Blog CMS
 
-A modern, SEO-optimized blog content management system built with Next.js 14, Tailwind CSS, and Solana Web3 integration.
+A modern, SEO-optimized blog content management system built with **Next.js 14**, Tailwind CSS, and Solana Web3 integration.
 
-![Web3 Blog CMS](public/og-image.png)
+**Live demo:** https://web3-blog-cms.vercel.app
 
-## ✨ Features
+## Features
 
-- 🔍 **SEO Optimized** - Meta tags, Open Graph, JSON-LD, Article Schema
-- 📝 **Markdown Editor** - Write articles with full markdown support
-- 📚 **Article Management** - Create, edit, and publish articles
-- 🏷️ **Categories & Tags** - Organize your content effectively
-- 🔎 **Search** - Full-text search across all articles
-- 🔗 **Related Posts** - Smart content recommendations
-- 🦊 **Solana Integration** - Wallet connection and on-chain verification
-- 🌙 **Dark Theme** - Modern dark UI design
-- 📱 **Responsive** - Works perfectly on all devices
-- ⚡ **TypeScript** - Type-safe and maintainable codebase
+- 🔍 **SEO optimized** — meta tags, Open Graph, JSON-LD (Article + Breadcrumb schema)
+- 📝 **Markdown editor** — write articles with full Markdown support
+- 📚 **Article management** — create, edit, publish, delete
+- 🏷️ **Categories & tags** — organize content effectively
+- 🔎 **Search** — full-text search across all articles
+- 🔗 **Related posts** — smart content recommendations
+- 🦊 **Solana integration** — wallet connect & on-chain article verification
+- 🌙 **Dark theme** — modern dark UI
+- 📱 **Responsive** — all devices
 
-## 🛠️ Technology Stack
+## Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| **Next.js 14** | React framework with App Router |
-| **Tailwind CSS** | Utility-first CSS framework |
-| **TypeScript** | Static type checking |
-| **Marked** | Markdown parsing |
-| **Gray-Matter** | Frontmatter parsing |
-| **Solana Web3** | Blockchain integration |
-| **Solana Wallet Adapter** | Wallet connection |
+| Technology | Use |
+|------------|-----|
+| Next.js 14 (App Router) | React framework |
+| Tailwind CSS | Utility-first styling |
+| TypeScript | Type safety |
+| Marked | Markdown parsing |
+| Gray-matter | Frontmatter parsing |
+| Solana Web3 / Wallet Adapter | Blockchain integration |
 
-## 📁 Project Structure
-web3-blog-cms/
-├── app/ # Next.js App Router
-│ ├── layout.tsx # Root layout with metadata
-│ ├── page.tsx # Homepage
-│ ├── article/[slug]/ # Dynamic article routes
-│ ├── admin/ # Admin dashboard
-│ │ ├── page.tsx # Admin homepage
-│ │ ├── create/ # Create article
-│ │ └── actions.ts # Server actions
-│ ├── category/[slug]/ # Category pages
-│ ├── tag/[slug]/ # Tag pages
-│ └── search/ # Search results
-├── components/ # React components
-│ ├── layout/ # Layout components
-│ │ ├── Header.tsx # Navigation with search
-│ │ └── Footer.tsx # Page footer
-│ ├── articles/ # Article components
-│ │ ├── ArticleCard.tsx
-│ │ ├── ArticleList.tsx
-│ │ └── RelatedPosts.tsx
-│ ├── common/ # Shared/SEO components
-│ │ ├── SEOHead.tsx
-│ │ ├── ArticleSchema.tsx
-│ │ └── BreadcrumbSchema.tsx
-│ ├── editor/ # Markdown editor
-│ │ ├── MarkdownEditor.tsx
-│ │ └── ArticleForm.tsx
-│ └── web3/ # Web3 components
-│ ├── SolanaProvider.tsx
-│ ├── ConnectWallet.tsx
-│ └── ArticleOwnership.tsx
-├── lib/ # Utilities & helpers
-│ ├── db.ts # Database operations
-│ ├── markdown.ts # Markdown processing
-│ └── solana.ts # Solana configuration
-├── utils/ # Shared utilities
-├── hooks/ # Custom React hooks
-├── types/ # TypeScript definitions
-└── data/ # JSON data storage
-└── articles.json # Article data
+## Project Structure
 
-text
+```text
+app/
+├── layout.tsx          # Root layout with metadata + SEO
+├── page.tsx            # Homepage (article list)
+├── article/[slug]/     # Dynamic article routes
+├── admin/              # Admin dashboard (list, create, edit)
+│   ├── actions.ts      # Server actions
+│   └── create / edit/  # Article forms
+├── category/[slug]/    # Category pages
+├── tag/[slug]/         # Tag pages
+├── search/             # Search results
+└── api/                # API routes
+components/
+├── layout/             # Header, Footer
+├── articles/           # ArticleCard, ArticleList, RelatedPosts
+├── common/             # SEOHead, ArticleSchema, BreadcrumbSchema
+├── editor/             # MarkdownEditor, ArticleForm
+├── admin/              # Admin UI components
+└── web3/               # SolanaProvider, ConnectWallet, ArticleOwnership
+lib/
+├── db.ts               # Data helpers (reads/writes articles.json)
+├── markdown.ts         # Markdown processing
+├── seo.ts              # SEO helpers (schema generation)
+└── solana.ts           # Solana configuration
+data/
+└── articles.json       # Article data store
+```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18.0 or later
-- npm or yarn package manager
-- Git (for version control)
-- Phantom or Solflare wallet (for Web3 features)
+- Node.js 18+
+- npm or yarn
+- A Solana wallet (Phantom / Solflare) for Web3 features
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/web3-blog-cms.git
-   cd web3-blog-cms
-Install dependencies
-
-bash
+```bash
+git clone https://github.com/jejakmasgondrong/web3-blog-cms.git
+cd web3-blog-cms
 npm install
-Set up environment variables
+```
 
-bash
-cp .env.example .env.local
-Edit .env.local with your configuration:
+### Environment variables
 
-env
-# Public (safe to expose)
+Create `.env.local`:
+
+```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_APP_NAME=Web3 Blog CMS
-NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
+```
 
-# Private (NEVER use NEXT_PUBLIC prefix!)
-# DATABASE_URL=postgresql://user:password@localhost:5432/db
-# JWT_SECRET=your-secret-key-here
-Run development server
+All variables are public-safe (no `NEXT_PUBLIC_` secrets — this project stores data in `data/articles.json`, not a remote DB).
 
-bash
+### Run the dev server
+
+```bash
 npm run dev
-Open your browser
-Navigate to http://localhost:3000
+```
 
-📝 Usage Guide
-Creating an Article
-Navigate to /admin page
+Open http://localhost:3000.
 
-Click "Create New Article"
+## Usage
 
-Fill in the form:
+- **Create an article** — go to `/admin`, click Create, fill in title, description, Markdown content, category, tags, image URL, and author, then **Publish**
+- **Edit / delete** — use the edit icons on any article
+- **Search** — use the search bar in the header
+- **Categories / tags** — filter articles by category or tag
+- **Web3** — connect a Solana wallet to verify article ownership by signing a message
 
-Title - Article headline
+## Scripts
 
-Description - SEO meta description
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Dev server |
+| `npm run build` | Production build |
+| `npm start` | Run production build |
+| `npm run lint` | ESLint check |
 
-Content - Write in Markdown
+## Deployment
 
-Category - Select or create new
+**Recommended: Vercel**
 
-Tags - Add relevant tags (comma separated)
+1. Push the repo to GitHub
+2. Import in Vercel
+3. Add optional env vars
+4. Deploy
 
-Image - URL for featured image
+## Notes
 
-Author - Your name
+- Articles are stored in `data/articles.json` (simple, portable — no external database required)
+- Troubleshooting regular issues can be found in `DEBUGGING.md`
 
-Click "Publish" to save
+## License
 
-Managing Content
-View Articles - All articles appear on homepage
+MIT — free for learning or portfolio purposes.
 
-Edit Articles - Click edit icon on any article
+## Author
 
-Delete Articles - Remove unwanted content
-
-Search - Use search bar to find articles
-
-Categories - Filter by category
-
-Tags - Filter by tag
-
-Web3 Features
-Connect your Solana wallet (Phantom/Solflare)
-
-Verify article ownership by signing a message
-
-On-chain verification (coming soon)
-
-🔧 Configuration
-Environment Variables
-Variable	Description	Required
-NEXT_PUBLIC_SITE_URL	Your site URL	Yes
-NEXT_PUBLIC_APP_NAME	Application name	Yes
-NEXT_PUBLIC_SOLANA_RPC_URL	Solana RPC endpoint	For Web3
-DATABASE_URL	Database URL (for production)	For production
-JWT_SECRET	JWT secret key	For auth
-Tailwind CSS
-Customize theme in tailwind.config.ts and global styles in app/globals.css.
-
-🚢 Deployment
-Deploy to Vercel (Recommended)
-Push your code to GitHub
-
-Import the project on Vercel
-
-Add environment variables
-
-Deploy
-
-Build for Production
-bash
-npm run build
-npm start
-🤝 Contributing
-Contributions are welcome! Here's how:
-
-Fork the repository
-
-Create a feature branch (git checkout -b feature/amazing-feature)
-
-Commit changes (git commit -m 'Add amazing feature')
-
-Push to branch (git push origin feature/amazing-feature)
-
-Open a Pull Request
-
-📄 License
-This project is licensed under the MIT License.
-
-🙏 Acknowledgments
-Built with Next.js
-
-Styled with Tailwind CSS
-
-Web3 powered by Solana Web3
-
-Built with ❤️ for the Web3 community
+Gondrong — [jejakmasgondrong](https://github.com/jejakmasgondrong)
